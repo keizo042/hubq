@@ -2,7 +2,6 @@ package cli
 
 import (
 	"context"
-	"fmt"
 	"github.com/keizo042/hubq/config"
 	"github.com/keizo042/hubq/di"
 	"github.com/keizo042/hubq/search"
@@ -11,7 +10,16 @@ import (
 )
 
 func (com *Commands) SearchFlags() []cli.Flag {
-	return []cli.Flag{}
+	return []cli.Flag{
+		cli.StringFlag{
+			Name:  "keyword, k",
+			Value: "",
+		},
+		cli.StringFlag{
+			Name:  "execute, e",
+			Value: "",
+		},
+	}
 }
 
 type searchCommand struct {
@@ -19,11 +27,16 @@ type searchCommand struct {
 }
 
 func newSearchCommand(searchService search.Search) (*searchCommand, error) {
-	return nil, fmt.Errorf("TBD")
+	return &searchCommand{
+		searchService: searchService,
+	}, nil
 }
 
 func (com *searchCommand) parse(c *cli.Context) (*search.Request, *search.Option, error) {
-	return nil, nil, fmt.Errorf("TBD")
+	return &search.Request{
+		RawQuery: c.String("raw"),
+		Keyword:  c.String("keyword"),
+	}, nil, nil
 }
 
 func (com *searchCommand) show(res *search.Response) error {

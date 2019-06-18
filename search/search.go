@@ -3,8 +3,10 @@ package search
 import (
 	"context"
 	"fmt"
+	"github.com/keizo042/hubq/errors"
 	"github.com/keizo042/hubq/github"
 	"github.com/morikuni/failure"
+	"strings"
 )
 
 type (
@@ -14,7 +16,8 @@ type (
 	}
 
 	Request struct {
-		Keyword string
+		RawQuery string
+		Keyword  string
 	}
 
 	Response struct {
@@ -51,9 +54,27 @@ func (s *search) Search(ctx context.Context, req *Request, options *Option) (*Re
 }
 
 func (req *Request) validate() error {
+	if req.RawQuery == "" &&
+		req.Keyword == "" {
+		e := fmt.Errorf("require some query parameter")
+		return failure.Translate(e, errors.ConditionRequired)
+	}
 	return nil
 }
 
 func (req *Request) buildQuery() (string, error) {
-	return "", fmt.Errorf("TBD")
+	var b strings.Builder
+	if _, err := b.WriteString(req.RawQuery); err != nil {
+		return "", failure.Wrap(err)
+	}
+	if _, err := b.WriteString(" "); err != nil {
+		return "", failure.Wrap(err)
+	}
+	if _, err := b.WriteString(req.Keyword); err != nil {
+		return "", failure.Wrap(err)
+	}
+	if _, err := b.WriteString(" "); err != nil {
+		return "", failure.Wrap(err)
+	}
+	return b.String(), nil
 }
