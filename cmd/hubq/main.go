@@ -16,6 +16,7 @@ const (
 )
 
 var (
+	Version           string
 	DefaultConfigPath = "/.hubq/config"
 )
 
@@ -25,6 +26,7 @@ func main() {
 
 func realMain(argv []string) int {
 	c := cli.NewApp()
+	c.Version = Version
 	path := filepath.Join(os.Getenv("HOME"), DefaultConfigPath)
 	commands, err := hubcli.New(path)
 	if err != nil {
