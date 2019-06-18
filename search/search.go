@@ -21,6 +21,13 @@ type (
 	}
 
 	Response struct {
+		Repositories []Repository
+	}
+
+	Repository struct {
+		Name     string
+		Author   string
+		CloneURL string
 	}
 
 	Option struct {
@@ -47,10 +54,23 @@ func (s *search) Search(ctx context.Context, req *Request, options *Option) (*Re
 	if err != nil {
 		return nil, failure.Wrap(err)
 	}
-	if _, err := s.githubClient.Search(ctx, q); err != nil {
+	res, err := s.githubClient.Search(ctx, q)
+	if err != nil {
 		return nil, failure.Wrap(err)
 	}
-	return &Response{}, nil
+	var repos []Repository
+	for _, r := range res.Repositories {
+		repos = append(repos, Repository{
+			Name:     r.GetName(),
+			Author:   r.GetFullName(),
+			CloneURL: r.GetGitURL(),
+		})
+
+	}
+
+	return &Response{
+		Repositories: repos,
+	}, nil
 }
 
 func (req *Request) validate() error {

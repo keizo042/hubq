@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"fmt"
 	"github.com/keizo042/hubq/config"
 	"github.com/keizo042/hubq/di"
 	"github.com/keizo042/hubq/search"
@@ -33,14 +34,18 @@ func newSearchCommand(searchService search.Search) (*searchCommand, error) {
 }
 
 func (com *searchCommand) parse(c *cli.Context) (*search.Request, *search.Option, error) {
-	return &search.Request{
-		RawQuery: c.String("raw"),
+	res := &search.Request{
+		RawQuery: c.String("execute"),
 		Keyword:  c.String("keyword"),
-	}, nil, nil
+	}
+	return res, nil, nil
 }
 
 func (com *searchCommand) show(res *search.Response) error {
-	return failure.Wrap(nil)
+	for _, repo := range res.Repositories {
+		fmt.Printf("name: %s\tauthor: %s\trepo: %s", repo.Author, repo.Name, repo.CloneURL)
+	}
+	return nil
 }
 
 func (com *Commands) SearchCommand() cli.Command {
