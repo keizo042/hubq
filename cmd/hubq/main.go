@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	hubcli "github.com/keizo042/hubq/cli"
+	"github.com/morikuni/failure"
 	"github.com/urfave/cli"
 )
 
@@ -34,6 +35,11 @@ func realMain(argv []string) int {
 	}
 
 	if err := c.Run(argv); err != nil {
+		code, ok := failure.CodeOf(err)
+		if ok {
+			fmt.Println(code)
+			return exitFailure
+		}
 		fmt.Printf("%+v\n", err)
 		return exitFailure
 	}
