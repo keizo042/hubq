@@ -44,7 +44,7 @@ func (com *searchCommand) parse(c *cli.Context) (*search.Request, *search.Option
 func (com *searchCommand) show(res *search.Response) error {
 	fmt.Println("name\trepo\turl")
 	for _, repo := range res.Repositories {
-		fmt.Printf("%s\t%s\t%s\n", repo.Author, repo.Name, repo.CloneURL)
+		fmt.Println(repo.CloneURL)
 	}
 	return nil
 }
