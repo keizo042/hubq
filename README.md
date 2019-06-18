@@ -7,7 +7,7 @@ Usage:
 command line interface for github search api
 
 ```
-hub search -e "keizo042/hubq"
+hubq search -e "keizo042/hubq"
 ```
 
 Requirements:
