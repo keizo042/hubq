@@ -34,7 +34,7 @@ func realMain(argv []string) int {
 	}
 
 	if err := c.Run(argv); err != nil {
-		fmt.Println(err)
+		fmt.Printf("%+v\n", err)
 		return exitFailure
 	}
 	return exitSuccess

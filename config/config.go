@@ -15,7 +15,7 @@ func Parse(path string) (*Config, error) {
 	if _, err := toml.DecodeFile(path, &c); err != nil {
 		return nil, failure.Wrap(err)
 	}
-	return &Config{}, nil
+	return &c, nil
 }
 
 func (c *Config) validate() error {

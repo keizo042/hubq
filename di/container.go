@@ -16,5 +16,7 @@ type (
 )
 
 func NewContainer(c *config.Config) (*Container, error) {
-	return &Container{}, nil
+	return &Container{
+		Config: c,
+	}, nil
 }
