@@ -60,10 +60,13 @@ func (s *search) Search(ctx context.Context, req *Request, options *Option) (*Re
 	}
 	var repos []Repository
 	for _, r := range res.Repositories {
+		if r.SSHURL == nil {
+			continue
+		}
 		repos = append(repos, Repository{
 			Name:     r.GetName(),
 			Author:   r.GetFullName(),
-			CloneURL: r.GetGitURL(),
+			CloneURL: *r.SSHURL,
 		})
 
 	}
