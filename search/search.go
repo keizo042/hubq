@@ -18,6 +18,7 @@ type (
 	Request struct {
 		RawQuery string
 		Keyword  string
+		Org      string
 	}
 
 	Response struct {
@@ -78,7 +79,8 @@ func (s *search) Search(ctx context.Context, req *Request, options *Option) (*Re
 
 func (req *Request) validate() error {
 	if req.RawQuery == "" &&
-		req.Keyword == "" {
+		req.Keyword == "" &&
+		req.Org == "" {
 		e := fmt.Errorf("require some query parameter")
 		return failure.Translate(e, errors.ConditionRequired)
 	}
@@ -97,6 +99,9 @@ func (req *Request) buildQuery() (string, error) {
 		return "", failure.Wrap(err)
 	}
 	if _, err := b.WriteString(" "); err != nil {
+		return "", failure.Wrap(err)
+	}
+	if _, err := b.WriteString(fmt.Sprintf("org:%s", req.Org)); err != nil {
 		return "", failure.Wrap(err)
 	}
 	return b.String(), nil

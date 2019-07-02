@@ -20,6 +20,10 @@ func (com *Commands) SearchFlags() []cli.Flag {
 			Name:  "execute, e",
 			Value: "",
 		},
+		cli.StringFlag{
+			Name:  "org",
+			Value: "",
+		},
 	}
 }
 
@@ -37,6 +41,7 @@ func (com *searchCommand) parse(c *cli.Context) (*search.Request, *search.Option
 	res := &search.Request{
 		RawQuery: c.String("execute"),
 		Keyword:  c.String("keyword"),
+		Org:      c.String("org"),
 	}
 	return res, nil, nil
 }
